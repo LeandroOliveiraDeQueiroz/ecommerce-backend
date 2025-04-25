@@ -1,7 +1,6 @@
 // src/server.ts
 import express from 'express';
 import dotenv from 'dotenv';
-// import prisma from "./db/prisma";
 import client from './db';
 import { createDatabase } from './db/';
 import userRouter from './routes/users';
@@ -28,7 +27,6 @@ app.use('/user', userRouter);
 app.get('/', async (req, res) => {
   try {
     const result = await client.query('SELECT NOW()');
-    // console.log("prisma", prisma);
     res.send(result.rows[0]);
   } catch (error) {
     console.error('Error executing query', error);
