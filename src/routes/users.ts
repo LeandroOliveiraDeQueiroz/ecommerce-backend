@@ -2,7 +2,7 @@ import express from 'express';
 import { UserRepository } from '../repository';
 import client from '../db';
 import { UserService } from '../services';
-import { UserController } from '../controllers/UserController';
+import { UserController } from '../controllers/userController';
 import Joi from 'joi';
 
 const userRouter = express.Router();

@@ -1,6 +1,6 @@
 import Joi from 'joi';
 import { Request, Response } from 'express';
-import { UserService } from '../services/user';
+import { UserService } from '../../services/user';
 // import { IUser } from '../models';
 
 export class UserController {
@@ -11,6 +11,7 @@ export class UserController {
   ) {}
 
   async signin(req: Request, res: Response) {
+    // console.log( req.path)
     const body = req.body;
     const { error } = this.signinSchema.validate(body);
     if (error) {
@@ -23,8 +24,10 @@ export class UserController {
       const email: string = body.email;
       const password: string = body.password;
 
-      console.log(await this.useService.create(name, email, password));
-      res.status(200).send();
+      const signed = await this.useService.create(name, email, password);
+      console.log('Signed: ', signed);
+      if (signed) res.status(200).send();
+      else res.status(400).send();
     } catch (error) {
       console.log('error', error);
       res.status(500).send();
@@ -44,16 +47,14 @@ export class UserController {
       const password: string = body.password;
 
       // const jwt =
-      const token = await this.useService.authenticate(email, password);
+      const result = await this.useService.authenticate(email, password);
 
-      if (!token) {
+      if (!result) {
         res.status(401).send();
         return;
       }
 
-      res.status(200).send({
-        accessToken: token,
-      });
+      res.status(200).send(result);
     } catch (error) {
       res.status(500);
       console.log('error', error);

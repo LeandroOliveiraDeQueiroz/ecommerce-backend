@@ -1,18 +1,25 @@
-import { IUser } from '../../models';
 import { UserRepository } from '../../repository';
 import { JWT } from '../../utils';
 import { Encrypter } from '../../utils/encrypt';
+import { IAuthenticateResult } from './types';
 
 export class UserService {
   constructor(private userRepository: UserRepository) {}
 
-  async create(name: string, email: string, password: string): Promise<IUser> {
+  async create(
+    name: string,
+    email: string,
+    password: string
+  ): Promise<boolean> {
     const hashedPassword = await Encrypter.encrypt(password);
 
     return this.userRepository.insert(name, email, hashedPassword);
   }
 
-  async authenticate(email: string, password: string): Promise<string | null> {
+  async authenticate(
+    email: string,
+    password: string
+  ): Promise<IAuthenticateResult | null> {
     const params = [{ field: 'email', value: email }];
 
     console.log('params on autheticate:', params);
@@ -39,6 +46,6 @@ export class UserService {
 
     console.log('accessToken: ', accessToken);
 
-    return accessToken;
+    return { accessToken: accessToken, name: user.name };
   }
 }

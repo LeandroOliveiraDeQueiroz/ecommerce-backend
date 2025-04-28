@@ -14,13 +14,13 @@ export class UserRepository {
     name: string,
     email: string,
     hashedPassword: string
-  ): Promise<IUser> {
+  ): Promise<boolean> {
     const values = [name, email, hashedPassword];
     const res = await this.db.query(UserRepository.insertQuery, values);
 
     console.log('Response database', res);
 
-    return res.rows[0] as IUser;
+    return res.rowCount === 1;
   }
 
   async get(params: IWhereQueryParam[]) {

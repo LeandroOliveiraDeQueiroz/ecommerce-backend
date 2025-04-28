@@ -4,6 +4,10 @@ import dotenv from 'dotenv';
 import client from './db';
 import { createDatabase } from './db/';
 import userRouter from './routes/users';
+import checkAuth from './middleware/checkAuth';
+import cors from 'cors';
+import favoriteProductsListRouter from './routes/favoriteProductsList';
+
 dotenv.config();
 
 const app = express();
@@ -21,8 +25,17 @@ async function connectToDb() {
 
 connectToDb();
 
+//TODO configure CORS accept correctly domains
+app.use(
+  cors({
+    origin: '*',
+  })
+);
+
 app.use(express.json());
+app.use(checkAuth);
 app.use('/user', userRouter);
+app.use('/favorite-products-list', favoriteProductsListRouter);
 
 app.get('/', async (req, res) => {
   try {
