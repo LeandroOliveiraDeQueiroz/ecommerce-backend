@@ -18,7 +18,7 @@ export class FavoriteProductListRepository {
           fl.description AS description,
           fl.product_quantity as product_quantity,
           CASE
-              WHEN COUNT(fp.id) > 0 THEN json_agg(fp)
+              WHEN COUNT(fp.id) > 0 THEN json_agg(fp.product_id)
               ELSE '[]'::json
           END AS favorite_products
       FROM
@@ -55,8 +55,8 @@ export class FavoriteProductListRepository {
 
     console.log('Response database:', res);
 
-    const favoriteProductList: IFavoriteProductList | null =
-      res.rowCount && res.rowCount >= 1 ? res.rows[0] : null;
+    const favoriteProductList: boolean | null =
+      res.rowCount && res.rowCount >= 1 ? true : false;
 
     return favoriteProductList;
   }

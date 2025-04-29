@@ -93,7 +93,7 @@ export class FavoriteProductListController {
     }
 
     try {
-      console.log(await this.favoriteProductListService.update(value));
+      await this.favoriteProductListService.update(value);
       res.status(200).send();
     } catch (error) {
       console.log('error', error);
