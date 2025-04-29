@@ -20,15 +20,19 @@ Esta seção contém informações importantes sobre o projeto. [Voltar ao Índi
 Aqui você pode descrever a arquitetura do seu sistema, os componentes principais e como eles interagem. Use diagramas, se necessário, para ilustrar o design.
 
 Requisitos: 
+
 ![image](https://github.com/user-attachments/assets/2834e49e-6ff7-49ae-aa14-fa20895f366b)
 
 Modelo de dados:
+
 ![image](https://github.com/user-attachments/assets/1cdb0e58-b21a-4285-9388-94154809189c)
 
 Descrição da API:
+
 ![image](https://github.com/user-attachments/assets/3998aab0-0eac-4058-b60d-4684d43f793e)
 
 Ideia de design:
+
 ![image](https://github.com/user-attachments/assets/4cd00aca-8d59-4c08-b16f-f8c2e67c6698)
 
 Ideia do monolito:
