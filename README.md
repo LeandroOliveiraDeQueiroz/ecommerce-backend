@@ -11,9 +11,10 @@
 
 **Pontos principais:**
 
-- O Docker desse projeto eu configurei
-- Crie issues para as coisas que não foi possível fazer a tempo ou que podem melhorar
-- Me inspirei na arquitura do NestJS e pretendo passar código para essa framework no fututo.
+- **Transactions**: As operações de adicionar e remover item não foram feitas como Transactions - **realizá-las rapidamente pode causar bugs**
+- **Bocker:** Eu o configurei nesse projeto
+- **Git Issues:** Crie para futuras melhorias ou features.
+- **Class Based API**
 
 [Voltar ao Índice](#índice).
 
