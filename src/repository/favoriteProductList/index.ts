@@ -12,29 +12,6 @@ import { AbstractFavoriteProductListRepository } from './proxy';
 export class FavoriteProductListRepository
   implements AbstractFavoriteProductListRepository
 {
-  //TODO create method for make description not obligated
-  private static insertQuery = `
-    INSERT INTO favorite_product_list (title, description, user_id) VALUES ($1, $2, $3);`;
-
-  private static getQuery = `
-      SELECT
-          fl.id AS id,
-          fl.title AS title,
-          fl.description AS description,
-          fl.product_quantity as product_quantity,
-          CASE
-              WHEN COUNT(fp.id) > 0 THEN json_agg(fp.product_id)
-              ELSE '[]'::json
-          END AS favorite_products
-      FROM
-          favorite_product_list AS fl
-      LEFT JOIN
-          favorite_product fp ON fl.id = fp.favorite_product_list_id
-      WHERE
-          fl.user_id = $1
-      GROUP BY fl.id;
-  `;
-
   constructor(private db: Client) {}
 
   async insert({
@@ -43,10 +20,7 @@ export class FavoriteProductListRepository
     user_id,
   }: TInsertParams): Promise<IFavoriteProductList> {
     const values = [title, description, user_id];
-    const res = await this.db.query(
-      FavoriteProductListRepository.insertQuery,
-      values
-    );
+    const res = await this.db.query(INSERT_FAVORITE_PRODUCTS_QUERY, values);
 
     console.log('Response database:', res);
 
@@ -94,11 +68,8 @@ export class FavoriteProductListRepository
     return favoriteProductList;
   }
 
-  //TODO text null description callback
   async getByUserId({ user_id }: TGetParams) {
-    const res = await this.db.query(FavoriteProductListRepository.getQuery, [
-      user_id,
-    ]);
+    const res = await this.db.query(GET_FAVORITE_PRODUCTS_QUERY, [user_id]);
 
     console.log('Response database:', res);
 
@@ -127,3 +98,25 @@ const UPDATE_FAVORITE_PRODUCTS_QUANTITY_QUERY = `
   SET product_quantity = product_quantity + $1
   WHERE id = $2;
 `;
+
+const INSERT_FAVORITE_PRODUCTS_QUERY = `
+    INSERT INTO favorite_product_list (title, description, user_id) VALUES ($1, $2, $3);`;
+
+const GET_FAVORITE_PRODUCTS_QUERY = `
+      SELECT
+          fl.id AS id,
+          fl.title AS title,
+          fl.description AS description,
+          fl.product_quantity as product_quantity,
+          CASE
+              WHEN COUNT(fp.id) > 0 THEN json_agg(fp.product_id)
+              ELSE '[]'::json
+          END AS favorite_products
+      FROM
+          favorite_product_list AS fl
+      LEFT JOIN
+          favorite_product fp ON fl.id = fp.favorite_product_list_id
+      WHERE
+          fl.user_id = $1
+      GROUP BY fl.id;
+  `;
