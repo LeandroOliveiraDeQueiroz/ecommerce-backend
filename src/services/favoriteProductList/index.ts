@@ -88,12 +88,6 @@ export class FavoriteProductListService {
   }
 
   private hasProduct(list: IFavoriteProductList | null, product_id: number) {
-    console.log('list', list);
-    console.log('product_id', product_id);
-    console.log(
-      'list.favorite_products.includes(product_id)',
-      (list?.favorite_products || []).includes(product_id)
-    );
     if (
       list &&
       list.favorite_products &&

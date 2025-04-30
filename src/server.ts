@@ -15,7 +15,7 @@ const port = 3000;
 async function connectToDb() {
   try {
     await client.connect();
-    console.log('Connected to the database');
+
     await createDatabase();
   } catch (error) {
     console.error('Error connecting to the database:', error);
@@ -46,6 +46,4 @@ app.get('/', async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
-});
+app.listen(port, () => {});

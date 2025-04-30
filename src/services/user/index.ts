@@ -22,17 +22,11 @@ export class UserService {
   ): Promise<IAuthenticateResult | null> {
     const params = [{ field: 'email', value: email }];
 
-    console.log('params on autheticate:', params);
-
     const user = await this.userRepository.get(params);
-
-    console.log('user: ', user);
 
     if (!user || !user.id) return null;
 
     const isPasswordCorrect = await Encrypter.compare(password, user.password);
-
-    console.log('isPasswordCorrect: ', isPasswordCorrect);
 
     if (!isPasswordCorrect) return null;
 
@@ -43,8 +37,6 @@ export class UserService {
       jwtSecret: process.env.JWT_SECRET_KEY || '',
       options: {},
     });
-
-    console.log('accessToken: ', accessToken);
 
     return { accessToken: accessToken, name: user.name };
   }

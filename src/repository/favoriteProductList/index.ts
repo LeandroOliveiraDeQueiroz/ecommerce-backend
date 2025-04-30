@@ -22,8 +22,6 @@ export class FavoriteProductListRepository
     const values = [title, description, user_id];
     const res = await this.db.query(INSERT_FAVORITE_PRODUCTS_QUERY, values);
 
-    console.log('Response database:', res);
-
     return res.rows[0] as IFavoriteProductList;
   }
 
@@ -33,8 +31,6 @@ export class FavoriteProductListRepository
       description,
       user_id,
     ]);
-
-    console.log('Response database:', res);
 
     const favoriteProductList: boolean | null =
       res.rowCount && res.rowCount >= 1 ? true : false;
@@ -49,8 +45,6 @@ export class FavoriteProductListRepository
       values
     );
 
-    console.log('Response database:', res);
-
     const favoriteProductList: boolean | null =
       res.rowCount && res.rowCount >= 1 ? true : false;
 
@@ -60,8 +54,6 @@ export class FavoriteProductListRepository
   async delete({ user_id }: TDeleteParams) {
     const res = await this.db.query(DELETE_FAVORITE_PRODUCTS_QUERY, [user_id]);
 
-    console.log('Response database:', res);
-
     const favoriteProductList: IFavoriteProductList | null =
       res.rowCount && res.rowCount >= 1 ? res.rows[0] : null;
 
@@ -70,8 +62,6 @@ export class FavoriteProductListRepository
 
   async getByUserId({ user_id }: TGetParams) {
     const res = await this.db.query(GET_FAVORITE_PRODUCTS_QUERY, [user_id]);
-
-    console.log('Response database:', res);
 
     const favoriteProductList: IFavoriteProductList | null =
       res.rowCount && res.rowCount >= 1 ? res.rows[0] : null;

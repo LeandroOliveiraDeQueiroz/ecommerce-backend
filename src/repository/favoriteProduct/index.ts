@@ -12,11 +12,8 @@ export class FavoriteProductRepository
     product_id,
   }: TInsertParams): Promise<boolean> {
     const values = [favorite_product_list_id, product_id];
-    console.log('values:', values);
-    const res = await this.db.query(INSERT_FAVORITE_PRODUCT_QUERY, values);
 
-    console.log('Response database:', res);
-    console.log('res.rows[0]:', res.rows[0]);
+    const res = await this.db.query(INSERT_FAVORITE_PRODUCT_QUERY, values);
 
     return res.rowCount !== null && res.rowCount >= 1;
   }
@@ -27,8 +24,6 @@ export class FavoriteProductRepository
   }: TDeleteParams): Promise<boolean> {
     const values = [favorite_product_list_id, product_id];
     const res = await this.db.query(DELETE_FAVORITE_PRODUCT_QUERY, values);
-
-    console.log('Response database:', res);
 
     return res.rowCount !== null && res.rowCount >= 1;
   }
