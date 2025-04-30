@@ -10,9 +10,9 @@
           - "5432:5432"
         healthcheck:
           test: "pg_isready -U postgres -h 127.0.0.1 -d postgres"
-          interval: 30s
-          timeout: 10s
-          retries: 3
+          interval: 5s
+          timeout: 5s
+          retries: 5
 
       app:
         build: .
