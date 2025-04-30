@@ -37,14 +37,14 @@ export class FavoriteProductListDTO {
 
   static getAddProductDTO(): TAddProductSchema {
     return Joi.object().keys({
-      list_id: Joi.number().required(),
+      user_id: Joi.number().required(),
       product_id: Joi.number().required(),
     });
   }
 
   static getRemoveProductPostDTO(): TRemoveProductSchema {
     return Joi.object().keys({
-      list_id: Joi.number().required(),
+      user_id: Joi.number().required(),
       product_id: Joi.number().required(),
     });
   }

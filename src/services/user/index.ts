@@ -1,10 +1,10 @@
-import { UserRepository } from '../../repository';
+import { AbstractUserRepository } from '../../repository/user/proxy';
 import { JWT } from '../../utils';
 import { Encrypter } from '../../utils/encrypt';
 import { IAuthenticateResult } from './types';
 
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: AbstractUserRepository) {}
 
   async create(
     name: string,

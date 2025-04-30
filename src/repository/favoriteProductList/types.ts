@@ -10,6 +10,10 @@ export type TUpdateParams = Pick<
   'user_id' | 'title' | 'description'
 >;
 
+export type TUpdateQuantityParams = Pick<IFavoriteProductList, 'id'> & {
+  increase: -1 | 1;
+};
+
 export type TDeleteParams = Pick<IFavoriteProductList, 'user_id'>;
 
 export type TGetParams = Pick<IFavoriteProductList, 'user_id'>;

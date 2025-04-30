@@ -1,7 +1,8 @@
 import { IUser } from '../../models';
 import { Client } from 'pg';
+import { AbstractUserRepository } from './proxy';
 
-export class UserRepository {
+export class UserRepository implements AbstractUserRepository {
   private static insertQuery = `
     INSERT INTO "user"(name, email, password) VALUES ( $1, $2, $3);`;
 

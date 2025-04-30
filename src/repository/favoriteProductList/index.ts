@@ -5,15 +5,20 @@ import {
   TUpdateParams,
   TDeleteParams,
   TGetParams,
+  TUpdateQuantityParams,
 } from './types';
+import { AbstractFavoriteProductListRepository } from './proxy';
 
-export class FavoriteProductListRepository {
+export class FavoriteProductListRepository
+  implements AbstractFavoriteProductListRepository
+{
   //TODO create method for make description not obligated
   private static insertQuery = `
     INSERT INTO favorite_product_list (title, description, user_id) VALUES ($1, $2, $3);`;
 
   private static getQuery = `
       SELECT
+          fl.id AS id,
           fl.title AS title,
           fl.description AS description,
           fl.product_quantity as product_quantity,
@@ -43,6 +48,8 @@ export class FavoriteProductListRepository {
       values
     );
 
+    console.log('Response database:', res);
+
     return res.rows[0] as IFavoriteProductList;
   }
 
@@ -52,6 +59,21 @@ export class FavoriteProductListRepository {
       description,
       user_id,
     ]);
+
+    console.log('Response database:', res);
+
+    const favoriteProductList: boolean | null =
+      res.rowCount && res.rowCount >= 1 ? true : false;
+
+    return favoriteProductList;
+  }
+
+  async updateQuantity({ id, increase }: TUpdateQuantityParams) {
+    const values = [increase, id];
+    const res = await this.db.query(
+      UPDATE_FAVORITE_PRODUCTS_QUANTITY_QUERY,
+      values
+    );
 
     console.log('Response database:', res);
 
@@ -98,4 +120,10 @@ const UPDATE_FAVORITE_PRODUCTS_QUERY = `
   SET title= $1, 
       description = $2
   WHERE user_id = $3;
+`;
+
+const UPDATE_FAVORITE_PRODUCTS_QUANTITY_QUERY = `
+  UPDATE favorite_product_list 
+  SET product_quantity = product_quantity + $1
+  WHERE id = $2;
 `;

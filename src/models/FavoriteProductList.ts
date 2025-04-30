@@ -1,5 +1,4 @@
 import client from '../db';
-import { IFavoriteProduct } from './FavoriteProduct';
 import { IUser } from './User';
 
 export interface IFavoriteProductList {
@@ -7,7 +6,7 @@ export interface IFavoriteProductList {
   title: string;
   description?: string;
   product_quantity: number;
-  favorite_products?: IFavoriteProduct[];
+  favorite_products?: number[];
   user_id: number;
   user?: Pick<IUser, 'id'> & Omit<Partial<IUser>, 'id'>;
 }

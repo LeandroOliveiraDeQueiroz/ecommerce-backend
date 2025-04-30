@@ -4,15 +4,16 @@ import client from '../db';
 import { UserService } from '../services';
 import { UserController } from '../controllers/userController';
 import Joi from 'joi';
+import { UserRepositoryErrorProxy } from '../repository/user/proxy';
 
 const userRouter = express.Router();
 
 //TODO create a Factory
 
 const userRepository = new UserRepository(client);
-const userService = new UserService(userRepository);
+const userRepositoryErrorProxy = new UserRepositoryErrorProxy(userRepository);
+const userService = new UserService(userRepositoryErrorProxy);
 
-//TODO create confirmPassword
 const signinSchema = Joi.object().keys({
   name: Joi.string().min(1).max(256).required(),
   email: Joi.string().email().required(),

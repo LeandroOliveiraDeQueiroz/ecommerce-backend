@@ -3,17 +3,35 @@ import client from '../db';
 import { FavoriteProductListController } from '../controllers/favoriteProductListController';
 import { FavoriteProductListService } from '../services/favoriteProductList';
 import { FavoriteProductListRepository } from '../repository/favoriteProductList';
+import { FavoriteProductRepository } from '../repository/favoriteProduct';
 import { FavoriteProductListDTO } from '../dto/favoriteProductListDTO';
+import { FavoriteProductListRepositoryErrorProxy } from '../repository/favoriteProductList/proxy';
+import { FavoriteProductRepositoryErrorProxy } from '../repository/favoriteProduct/proxy';
 
 const favoriteProductsListRouter = express.Router();
 
 //TODO create a Factory
+
+//Create service
 const favoriteProductListRepositoryRepository =
   new FavoriteProductListRepository(client);
+const favoriteProductListRepositoryErrorProxy =
+  new FavoriteProductListRepositoryErrorProxy(
+    favoriteProductListRepositoryRepository
+  );
+
+const favoriteProductRepositoryRepository = new FavoriteProductRepository(
+  client
+);
+const favoriteProductRepositoryErrorProxy =
+  new FavoriteProductRepositoryErrorProxy(favoriteProductRepositoryRepository);
+
 const favoriteProductListService = new FavoriteProductListService(
-  favoriteProductListRepositoryRepository
+  favoriteProductListRepositoryErrorProxy,
+  favoriteProductRepositoryErrorProxy
 );
 
+//Create controller
 const createDTO = FavoriteProductListDTO.getCreateDTO();
 const getDTO = FavoriteProductListDTO.getGetDTO();
 const updateDTO = FavoriteProductListDTO.getUpdateDTO();
@@ -56,7 +74,7 @@ favoriteProductsListRouter.post(
   favoriteProductListController.addProduct.bind(favoriteProductListController)
 );
 
-favoriteProductsListRouter.delete(
+favoriteProductsListRouter.post(
   '/remove-product',
   favoriteProductListController.removeProduct.bind(
     favoriteProductListController

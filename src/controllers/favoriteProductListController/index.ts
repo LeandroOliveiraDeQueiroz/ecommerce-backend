@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import { FavoriteProductListService } from '../../services/favoriteProductList';
 import {
+  IAddProductDTO,
   ICreateDTO,
   IDeleteDTO,
   IGetDTO,
@@ -14,6 +15,7 @@ import {
 } from '../../dto/favoriteProductListDTO/types';
 import { IRequestToPassJWTPayload } from '../../shared-types';
 import { ValidationResult } from 'joi';
+import { ApiError, BadRequestError } from '../../utils';
 
 export class FavoriteProductListController {
   constructor(
@@ -34,8 +36,7 @@ export class FavoriteProductListController {
     ) as ValidationResult<ICreateDTO>;
 
     if (error) {
-      res.status(400).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
@@ -46,8 +47,9 @@ export class FavoriteProductListController {
 
       res.status(200).send(favoriteProductList);
     } catch (error) {
-      console.log('error', error);
-      res.status(500).send();
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 
@@ -59,8 +61,7 @@ export class FavoriteProductListController {
       data
     ) as ValidationResult<IGetDTO>;
     if (error) {
-      res.status(400).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
@@ -77,8 +78,9 @@ export class FavoriteProductListController {
         res.status(200).send();
       }
     } catch (error) {
-      console.log('error', error);
-      res.status(500).send();
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 
@@ -88,16 +90,16 @@ export class FavoriteProductListController {
       data
     ) as ValidationResult<IUpdateDTO>;
     if (error) {
-      res.status(400).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
       await this.favoriteProductListService.update(value);
       res.status(200).send();
     } catch (error) {
-      console.log('error', error);
-      res.status(500).send();
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 
@@ -107,8 +109,7 @@ export class FavoriteProductListController {
       data
     ) as ValidationResult<IDeleteDTO>;
     if (error) {
-      res.status(400).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
@@ -119,52 +120,68 @@ export class FavoriteProductListController {
 
       res.status(200).send(favoriteProductsList);
     } catch (error) {
-      console.log('error', error);
-      res.status(500).send();
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 
-  async addProduct(req: Request, res: Response) {
-    const body = req.body;
-    const { error } = this.addProductDTO.validate(body);
+  async addProduct(req: IRequestToPassJWTPayload, res: Response) {
+    const data = { ...req.body, user_id: req.jwtPayload?.id };
+    const { error, value } = this.addProductDTO.validate(
+      data
+    ) as ValidationResult<IAddProductDTO>;
     if (error) {
-      res.status(400).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
-      // const list_id: number = body.list_id;
-      // const product_id: number = body.product_id;
-      // const favoriteProductsList = await this.favoriteProductListService.addPRodu(
-      //   user_id
-      // );
+      const { product_id, user_id } = value;
+      const favoriteProductsList =
+        await this.favoriteProductListService.addProduct({
+          product_id,
+          user_id,
+        });
 
-      res.status(200).send();
+      console.log('favoriteProductsList:', favoriteProductsList);
+      if (favoriteProductsList) {
+        res.status(200).send();
+      } else {
+        throw new Error();
+      }
     } catch (error) {
-      console.log('error', error);
-      res.status(500).send();
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 
-  async removeProduct(req: Request, res: Response) {
-    const body = req.body;
-    const { error } = this.addProductDTO.validate(body);
+  async removeProduct(req: IRequestToPassJWTPayload, res: Response) {
+    const data = { ...req.body, user_id: req.jwtPayload?.id };
+    const { error, value } = this.removeProductDTO.validate(
+      data
+    ) as ValidationResult<IAddProductDTO>;
     if (error) {
-      res.status(400).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
-      // const list_id: number = body.list_id;
-      // const product_id: number = body.product_id;
-      // const favoriteProductsList = await this.favoriteProductListService.addPRodu(
-      //   user_id
-      // );
+      const { product_id, user_id } = value;
+      const favoriteProductsList =
+        await this.favoriteProductListService.removeProduct({
+          product_id,
+          user_id,
+        });
 
-      res.status(200).send();
+      if (favoriteProductsList) {
+        res.status(200).send();
+      } else {
+        throw new Error();
+      }
     } catch (error) {
-      console.log('error', error);
-      res.status(500).send();
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 }

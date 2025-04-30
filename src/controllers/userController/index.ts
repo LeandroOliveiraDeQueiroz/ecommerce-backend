@@ -1,7 +1,7 @@
-import Joi from 'joi';
 import { Request, Response } from 'express';
 import { UserService } from '../../services/user';
-// import { IUser } from '../models';
+import { ApiError, BadRequestError, NotFoundError } from '../../utils';
+import { TLoginSchema, TSigninSchema } from '../../dto/userDTO/types';
 
 export class UserController {
   constructor(
@@ -11,12 +11,10 @@ export class UserController {
   ) {}
 
   async signin(req: Request, res: Response) {
-    // console.log( req.path)
     const body = req.body;
     const { error } = this.signinSchema.validate(body);
     if (error) {
-      res.status(400).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
@@ -25,12 +23,12 @@ export class UserController {
       const password: string = body.password;
 
       const signed = await this.useService.create(name, email, password);
-      console.log('Signed: ', signed);
       if (signed) res.status(200).send();
-      else res.status(400).send();
+      else throw Error();
     } catch (error) {
-      console.log('error', error);
-      res.status(500).send();
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 
@@ -38,37 +36,24 @@ export class UserController {
     const body = req.body;
     const { error } = this.loginSchema.validate(body);
     if (error) {
-      res.status(401).send();
-      return;
+      throw new BadRequestError('Campos invalidos');
     }
 
     try {
       const email: string = body.email;
       const password: string = body.password;
 
-      // const jwt =
       const result = await this.useService.authenticate(email, password);
 
       if (!result) {
-        res.status(401).send();
-        return;
+        throw new NotFoundError('Senha ou email incorretos');
       }
 
       res.status(200).send(result);
     } catch (error) {
-      res.status(500);
-      console.log('error', error);
+      const apiError = ApiError.handleError(error);
+      const { statusCode, message } = apiError;
+      res.status(statusCode).send(message);
     }
   }
 }
-
-type TSigninSchema = Joi.ObjectSchema<{
-  name: Joi.StringSchema<string>;
-  email: Joi.StringSchema<string>;
-  password: Joi.StringSchema<string>;
-}>;
-
-type TLoginSchema = Joi.ObjectSchema<{
-  email: Joi.StringSchema<string>;
-  password: Joi.StringSchema<string>;
-}>;

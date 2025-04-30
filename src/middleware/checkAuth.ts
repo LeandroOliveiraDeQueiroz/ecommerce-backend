@@ -1,5 +1,5 @@
 import { Response, NextFunction } from 'express';
-import { JWT } from '../utils';
+import { ApiError, JWT } from '../utils';
 import { IRequestToPassJWTPayload } from '../shared-types';
 
 const noAuthenticatedRoutes = new Set(['/user/signin', '/user/login']);
@@ -17,7 +17,8 @@ const checkAuth = async (
   const accessToken = req.headers.authorization;
 
   if (!accessToken) {
-    res.status(401).send({ isLogged: false, message: 'No Logged user' });
+    const apiError = new ApiError(401, 'Usuário não logado');
+    res.status(apiError.statusCode).send({ message: apiError.message });
     return;
   }
 
@@ -30,8 +31,10 @@ const checkAuth = async (
     req.jwtPayload = jwtPayload;
     next();
   } catch (error) {
+    const apiError = new ApiError(401, 'Usuário não logado');
     console.error(error);
-    res.status(401).send({ isLogged: false, message: 'Expired token' });
+
+    res.status(apiError.statusCode).send({ message: apiError.message });
   }
 };
 

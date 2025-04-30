@@ -41,11 +41,21 @@ export interface IDeleteDTO {
 }
 
 export type TAddProductSchema = Joi.ObjectSchema<{
-  list_id: Joi.StringSchema<number>;
+  user_id: Joi.StringSchema<number>;
   product_id: Joi.StringSchema<number>;
 }>;
 
+export interface IAddProductDTO {
+  user_id: number;
+  product_id: number;
+}
+
 export type TRemoveProductSchema = Joi.ObjectSchema<{
-  list_id: Joi.StringSchema<number>;
+  user_id: Joi.StringSchema<number>;
   product_id: Joi.StringSchema<number>;
 }>;
+
+export interface IRemoveProductDTO {
+  user_id: number;
+  product_id: number;
+}
