@@ -22,7 +22,7 @@ export class FavoriteProductRepositoryErrorProxy
 
   async delete(params: TDeleteParams): Promise<boolean> {
     try {
-      return await this.repo.insert(params);
+      return await this.repo.delete(params);
     } catch (error) {
       throw DatabaseErrorMapper.toApiError(error);
     }
