@@ -11,10 +11,10 @@
 
 **Pontos principais:**
 
-- **Transactions**: As operações de adicionar e remover item não foram feitas como Transactions - **realizá-las rapidamente pode causar bugs**
+- **Transactions**: As operações de **adicionar e remover produto** não foram feitas como Transactions - **realizá-las rapidamente pode causar bugs**
 - **Bocker:** Eu o configurei nesse projeto
 - **Git Issues:** Crie para futuras melhorias ou features.
-- **Class Based API**
+- **Class-Based API**
 
 [Voltar ao Índice](#índice).
 
