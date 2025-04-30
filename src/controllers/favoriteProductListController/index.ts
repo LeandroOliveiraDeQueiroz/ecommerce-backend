@@ -31,19 +31,18 @@ export class FavoriteProductListController {
   async create(req: IRequestToPassJWTPayload, res: Response) {
     const data = { ...req.body, user_id: req.jwtPayload?.id };
 
-    const { error, value } = this.createDTO.validate(
-      data
-    ) as ValidationResult<ICreateDTO>;
-
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
-
     try {
+      const { error, value } = this.createDTO.validate(
+        data
+      ) as ValidationResult<ICreateDTO>;
+
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       const favoriteProductList = await this.favoriteProductListService.create(
         value
       );
-      console.log('favoriteProductList:', favoriteProductList);
 
       res.status(200).send(favoriteProductList);
     } catch (error) {
@@ -54,27 +53,25 @@ export class FavoriteProductListController {
   }
 
   async get(req: IRequestToPassJWTPayload, res: Response) {
-    console.log('payload:', req.jwtPayload);
     const data = { user_id: req.jwtPayload?.id };
 
-    const { error, value } = this.getDTO.validate(
-      data
-    ) as ValidationResult<IGetDTO>;
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
-
     try {
+      const { error, value } = this.getDTO.validate(
+        data
+      ) as ValidationResult<IGetDTO>;
+
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       const { user_id } = value;
       const favoriteProductsList = await this.favoriteProductListService.get(
         user_id as number
       );
 
-      console.log('favoriteProductsList:', favoriteProductsList);
       if (favoriteProductsList) {
         res.status(200).send(favoriteProductsList);
       } else {
-        console.log('get', 'sem valor');
         res.status(200).send();
       }
     } catch (error) {
@@ -86,33 +83,38 @@ export class FavoriteProductListController {
 
   async update(req: IRequestToPassJWTPayload, res: Response) {
     const data = { ...req.body, user_id: req.jwtPayload?.id };
-    const { error, value } = this.updateDTO.validate(
-      data
-    ) as ValidationResult<IUpdateDTO>;
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
 
     try {
+      const { error, value } = this.updateDTO.validate(
+        data
+      ) as ValidationResult<IUpdateDTO>;
+
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       await this.favoriteProductListService.update(value);
       res.status(200).send();
     } catch (error) {
       const apiError = ApiError.handleError(error);
       const { statusCode, message } = apiError;
+
       res.status(statusCode).send(message);
     }
   }
 
   async delete(req: IRequestToPassJWTPayload, res: Response) {
     const data = { user_id: req.jwtPayload?.id };
-    const { error, value } = this.deleteDTO.validate(
-      data
-    ) as ValidationResult<IDeleteDTO>;
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
 
     try {
+      const { error, value } = this.deleteDTO.validate(
+        data
+      ) as ValidationResult<IDeleteDTO>;
+
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       const { user_id } = value;
       const favoriteProductsList = await this.favoriteProductListService.delete(
         user_id
@@ -128,14 +130,16 @@ export class FavoriteProductListController {
 
   async addProduct(req: IRequestToPassJWTPayload, res: Response) {
     const data = { ...req.body, user_id: req.jwtPayload?.id };
-    const { error, value } = this.addProductDTO.validate(
-      data
-    ) as ValidationResult<IAddProductDTO>;
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
 
     try {
+      const { error, value } = this.addProductDTO.validate(
+        data
+      ) as ValidationResult<IAddProductDTO>;
+
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       const { product_id, user_id } = value;
       const favoriteProductsList =
         await this.favoriteProductListService.addProduct({
@@ -143,7 +147,6 @@ export class FavoriteProductListController {
           user_id,
         });
 
-      console.log('favoriteProductsList:', favoriteProductsList);
       if (favoriteProductsList) {
         res.status(200).send();
       } else {
@@ -158,14 +161,16 @@ export class FavoriteProductListController {
 
   async removeProduct(req: IRequestToPassJWTPayload, res: Response) {
     const data = { ...req.body, user_id: req.jwtPayload?.id };
-    const { error, value } = this.removeProductDTO.validate(
-      data
-    ) as ValidationResult<IAddProductDTO>;
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
 
     try {
+      const { error, value } = this.removeProductDTO.validate(
+        data
+      ) as ValidationResult<IAddProductDTO>;
+
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       const { product_id, user_id } = value;
       const favoriteProductsList =
         await this.favoriteProductListService.removeProduct({

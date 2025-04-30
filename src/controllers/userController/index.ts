@@ -12,12 +12,13 @@ export class UserController {
 
   async signin(req: Request, res: Response) {
     const body = req.body;
-    const { error } = this.signinSchema.validate(body);
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
 
     try {
+      const { error } = this.signinSchema.validate(body);
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       const name: string = body.name;
       const email: string = body.email;
       const password: string = body.password;
@@ -34,12 +35,13 @@ export class UserController {
 
   async login(req: Request, res: Response) {
     const body = req.body;
-    const { error } = this.loginSchema.validate(body);
-    if (error) {
-      throw new BadRequestError('Campos invalidos');
-    }
 
     try {
+      const { error } = this.loginSchema.validate(body);
+      if (error) {
+        throw new BadRequestError('Campos invalidos');
+      }
+
       const email: string = body.email;
       const password: string = body.password;
 
