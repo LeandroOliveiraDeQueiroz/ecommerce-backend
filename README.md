@@ -59,7 +59,7 @@ Nesta seção, liste as tecnologias, linguagens de programação, frameworks e b
 * Banco de Dados: PostgreSQL
 * Outras Tecnologias: Docker, 
 
-[Voltar ao Índice](#índice) | [Voltar ao Disclaimer](#disclaimer)
+[Voltar ao Índice](#índice) | [Voltar ao Disclaimer](#disclaimer) | [Voltar ao System Design](#system-design)
 
 ---
 
@@ -89,4 +89,4 @@ Nesta seção, liste as tecnologias, linguagens de programação, frameworks e b
     npm run docker-up
     ```
 
-[Voltar ao Índice](#índice) | [Voltar ao Disclaimer](#disclaimer)
+[Voltar ao Índice](#índice) | [Voltar ao Disclaimer](#disclaimer) | [Voltar ao System Design](#system-design) | [Voltar ao Stack](#stack)
