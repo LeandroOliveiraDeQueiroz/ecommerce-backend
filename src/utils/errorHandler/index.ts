@@ -6,7 +6,6 @@ export class ApiError extends Error {
     super(message);
     this.statusCode = statusCode;
     this.details = details;
-    this.name = this.constructor.name; // Optional: Set the error name
   }
 
   static handleError(error: unknown): ApiError {
